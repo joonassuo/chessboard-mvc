@@ -36,3 +36,8 @@ var chessBoard = {
 window.onload = () => {    
     chessBoard.gridCreationMethod();
 };
+
+$('#startButton').on('click', () => {
+    startGame();
+});
+
