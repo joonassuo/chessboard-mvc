@@ -5,6 +5,11 @@ body {
     transform: translate(-50%, -50%);
 }
 
+img {
+    width: 100%;
+    height: auto;
+}
+
 #grid {
     display: flex;
     flex-direction: row;
