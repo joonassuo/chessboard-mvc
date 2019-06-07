@@ -2,12 +2,7 @@ var Model = {
 
     chessboard: [],
 
-    piece: {
-        color: '',
-        type: '',
-        image: '',
-        square: ''
-    },
+    activePiece: '',
 
     pieceTypes: [{
             color: 'white',
@@ -72,7 +67,10 @@ var Model = {
     ],
 
     gameStatus: {
-        toPlay: 'white'
+        toPlay: 'white',
+        gameStarted: false,
+        pieceIsActive: false,
+
     },
 
     move: {

@@ -33,12 +33,20 @@ var View = {
     }
 }
 
+
 window.onload = () => {
     View.chessBoard.gridCreationMethod();
 };
 
+
 $('#startButton').click(() => {
-    Controller.startGameMethod();
-    Controller.renderPiecesMethod();
+    if (!Model.gameStatus.gameStarted) {
+        Controller.startGameMethod();
+        Controller.renderPiecesMethod();
+    }
 });
 
+
+$('div').on('click', 'div', () => {
+    Controller.makeMoveMethod();
+});

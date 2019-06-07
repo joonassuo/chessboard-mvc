@@ -2,7 +2,7 @@
 
 
 var Controller = {
-    
+
     generatePieceMethod(color, type, square) {
         var piece = {
             color: color,
@@ -17,9 +17,9 @@ var Controller = {
     startGameMethod() {
         // generate all pieces in starting positions and push to model
         // ALL PAWNS
-        for(let i = 97; i < 105; i++){
-            this.generatePieceMethod( 'white', 'pawn', String.fromCharCode(i) + 2);
-            this.generatePieceMethod( 'black', 'pawn', String.fromCharCode(i) + 7);
+        for (let i = 97; i < 105; i++) {
+            this.generatePieceMethod('white', 'pawn', String.fromCharCode(i) + 2);
+            this.generatePieceMethod('black', 'pawn', String.fromCharCode(i) + 7);
         }
         // WHITE
         this.generatePieceMethod('white', 'rook', 'a1');
@@ -43,17 +43,48 @@ var Controller = {
 
 
     renderPiecesMethod() {
-        const array = Model.chessboard.slice();
-        
-        array.forEach((element) => {   
-            var img = document.createElement('img');         
+        const array = Model.chessboard;
+        array.forEach((element) => {
+            var img = document.createElement('img');
             img.setAttribute('src', element.image);
             document.querySelector('#' + element.square).appendChild(img);
-        });               
+        });
+        Model.gameStatus.gameStarted = true;
+    },
+
+
+    makeMoveMethod() {
+        var isActive = Model.gameStatus.pieceIsActive;
+
+        if (!isActive) {
+            // check if there is a piece, make sure only one can be active
+            if (event.target.tagName === 'IMG') {
+                $(event.target).css('background-color', 'green');
+                Model.gameStatus.pieceIsActive = true;
+                Model.move.startSquare = event.target.id;
+                this.getPieceMethod();
+                // Controller.getPieceMethod();
+            }
+        } else {
+            if (event.target.tagName !== 'IMG') {
+                Model.move.endSquare = event.target.id;
+
+                // check if move is legal, then:
+                $(event.target).css('background-color', 'red');
+                Model.gameStatus.pieceIsActive = false;
+                Model.chessboard.find(o => o.square === Model.activePiece.square).square = event.target.id;
+                this.renderPiecesMethod();
+            }
+        }
+    },
+
+
+
+    // USELESS?
+    getPieceMethod() {
+        var target = event.target.parentElement;
+        Model.activePiece = Model.chessboard.find(o => o.square === target.id);
+        console.log('Active piece is: ' + Model.activePiece.color + ' ' + Model.activePiece.type);
     }
+
 }
-
-
-
-
-
