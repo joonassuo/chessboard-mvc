@@ -15,6 +15,7 @@ var Controller = {
 
 
     startGameMethod() {
+        Model.chessboard = [];
         // generate all pieces in starting positions and push to model
         // ALL PAWNS
         for (let i = 97; i < 105; i++) {
@@ -42,7 +43,17 @@ var Controller = {
     },
 
 
+    clearBoard() {
+        var images = document.getElementsByTagName('img');
+        var l = images.length;
+        for (var i = 0; i < l; i++) {
+            images[0].parentNode.removeChild(images[0]);
+        }
+    },
+
+
     renderPiecesMethod() {
+        this.clearBoard();
         const array = Model.chessboard;
         array.forEach((element) => {
             var img = document.createElement('img');
@@ -70,7 +81,6 @@ var Controller = {
                 Model.move.endSquare = event.target.id;
 
                 // check if move is legal, then:
-                $(event.target).css('background-color', 'red');
                 Model.gameStatus.pieceIsActive = false;
                 Model.chessboard.find(o => o.square === Model.activePiece.square).square = event.target.id;
                 this.renderPiecesMethod();

@@ -47,6 +47,13 @@ $('#startButton').click(() => {
 });
 
 
+$('#resetButton').click(() => {
+    Controller.startGameMethod();
+    Controller.clearBoard();
+    Controller.renderPiecesMethod();
+})
+
+
 $('div').on('click', 'div', () => {
     Controller.makeMoveMethod();
 });
