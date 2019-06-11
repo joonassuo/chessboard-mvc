@@ -70,7 +70,7 @@ var Controller = {
 
         // check if move is legal according to piece rules
         switch (type) {
-            case 'pawn' :
+            case 'pawn':
                 if (deltaX === 0 && deltaY === 1) {
                     return true;
                 }
@@ -80,7 +80,7 @@ var Controller = {
                     return true;
                 }
                 break;
-            case 'knight' :
+            case 'knight':
                 if (deltaX === 1 && deltaY === 2 || deltaX === 2 && deltaY === 1) {
                     return true;
                 };
@@ -101,14 +101,12 @@ var Controller = {
                 }
                 break;
         }
-
-
-
-
     },
 
 
 
+
+    //------------------------------CLEAN UP MAKE MOVE SECTION!!!------------------------------------------
     makeMoveMethod() {
 
         var isActive = Model.gameStatus.pieceIsActive;
@@ -129,27 +127,38 @@ var Controller = {
             document.getElementById('turnIndicator').innerHTML = 'To Play: ' + Model.gameStatus.toPlay;
         }
 
-        if (!isActive) {
-            this.getPieceMethod();
 
-            // check if there is a piece, make sure only one can be active
+        // if no piece is active ATM:
+        if (!isActive) {
+            // if not empty:
+            this.getPieceMethod();
             if (event.target.style.cssText !== '' && Model.activePiece.color.toLowerCase() === Model.gameStatus.toPlay.toLowerCase()) {
                 $(event.target).css('background-color', 'green');
                 Model.gameStatus.pieceIsActive = true;
                 Model.move.startSquare = getCoordinates();
             }
-        } else {
+        // if piece is already active:
+        } else { 
+            // if empty square:
             if (event.target.style.cssText === '') {
                 Model.move.endSquare = getCoordinates();
-
-                // check if move is legal, then:
                 if (this.isLegal()) {
                     Model.gameStatus.pieceIsActive = false;
                     Model.chessboard.find(o => o.square === Model.activePiece.square).square = event.target.id;
                     this.renderPiecesMethod();
                     toggleTurn();
-
-                    console.log(Model.move);
+                }
+            } else {
+                // if opponent's piece:
+                if (Model.chessboard.find(o => o.square === event.target.id).color !== Model.gameStatus.toPlay) {
+                    if (this.isLegal()) {                        
+                        var index = Model.chessboard.indexOf(Model.chessboard.find(o => o.square === event.target.id));
+                        Model.chessboard.splice(index, 1);
+                        Model.chessboard.find(o => o.square === Model.activePiece.square).square = event.target.id;
+                        Model.gameStatus.pieceIsActive = false;
+                        this.renderPiecesMethod();
+                        toggleTurn();
+                    }
                 }
             }
         }
