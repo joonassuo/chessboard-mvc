@@ -96,7 +96,7 @@ var Controller = {
                 }
                 break;
             case 'king':
-                if (deltaX === 1 && deltaY === 0 || deltaX === 0 && deltaY === 1) {
+                if (deltaX === 1 && deltaY === 0 || deltaX === 0 && deltaY === 1 || deltaX === 1 && deltaY === 1) {
                     return true;
                 }
                 break;
@@ -151,6 +151,7 @@ var Controller = {
             } else {
                 // if opponent's piece:
                 if (Model.chessboard.find(o => o.square === event.target.id).color !== Model.gameStatus.toPlay) {
+                    Model.move.endSquare = getCoordinates();
                     if (this.isLegal()) {                        
                         var index = Model.chessboard.indexOf(Model.chessboard.find(o => o.square === event.target.id));
                         Model.chessboard.splice(index, 1);
@@ -169,7 +170,6 @@ var Controller = {
     // USELESS?
     getPieceMethod() {
         Model.activePiece = Model.chessboard.find(o => o.square === event.target.id);
-        console.log('Active piece is: ' + Model.activePiece.color + ' ' + Model.activePiece.type);
     }
 
 }
