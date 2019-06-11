@@ -67,13 +67,19 @@ var Model = {
     ],
 
     gameStatus: {
-        toPlay: 'white',
+        toPlay: 'White',
         gameStarted: false,
         pieceIsActive: false,
     },
 
     move: {
-        startSquare: '',
-        endSquare: '',
+        startSquare: {
+            x: '',
+            y: '',
+        },
+        endSquare: {
+            x: '',
+            y: '',
+        }
     }
 }

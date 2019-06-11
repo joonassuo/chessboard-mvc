@@ -56,3 +56,6 @@ $('#resetButton').click(() => {
 $('div').on('click', 'div', () => {
     Controller.makeMoveMethod();
 });
+
+
+

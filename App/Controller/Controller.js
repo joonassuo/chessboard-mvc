@@ -14,6 +14,7 @@ var Controller = {
     },
 
 
+
     startGameMethod() {
         Model.chessboard = [];
         // generate all pieces in starting positions and push to model
@@ -43,10 +44,12 @@ var Controller = {
     },
 
 
+
     clearBoard() {
         $('div > div').css('background-image', '');
         $('div > div').css('background-color', '');
     },
+
 
 
     renderPiecesMethod() {
@@ -59,25 +62,95 @@ var Controller = {
     },
 
 
+
+    isLegal() {
+        var type = Model.activePiece.type.toLowerCase();
+        var deltaX = Math.abs(Model.move.endSquare.x - Model.move.startSquare.x);
+        var deltaY = Math.abs(Model.move.endSquare.y - Model.move.startSquare.y);
+
+        // check if move is legal according to piece rules
+        switch (type) {
+            case 'pawn' :
+                if (deltaX === 0 && deltaY === 1) {
+                    return true;
+                }
+                break;
+            case 'rook':
+                if (deltaX > 0 && deltaY === 0 || deltaX === 0 && deltaY > 0) {
+                    return true;
+                }
+                break;
+            case 'knight' :
+                if (deltaX === 1 && deltaY === 2 || deltaX === 2 && deltaY === 1) {
+                    return true;
+                };
+                break;
+            case 'bishop':
+                if (deltaX === deltaY) {
+                    return true;
+                }
+                break;
+            case 'queen':
+                if (deltaX > 0 && deltaY === 0 || deltaX === 0 && deltaY > 0 || deltaX === deltaY) {
+                    return true;
+                }
+                break;
+            case 'king':
+                if (deltaX === 1 && deltaY === 0 || deltaX === 0 && deltaY === 1) {
+                    return true;
+                }
+                break;
+        }
+
+
+
+
+    },
+
+
+
     makeMoveMethod() {
+
         var isActive = Model.gameStatus.pieceIsActive;
 
+        const getCoordinates = () => {
+            return {
+                x: event.target.id.charCodeAt(0) - 96,
+                y: parseInt(event.target.id.charAt(1))
+            }
+        }
+
+        const toggleTurn = () => {
+            if (Model.gameStatus.toPlay === 'White') {
+                Model.gameStatus.toPlay = 'Black';
+            } else {
+                Model.gameStatus.toPlay = 'White';
+            }
+            document.getElementById('turnIndicator').innerHTML = 'To Play: ' + Model.gameStatus.toPlay;
+        }
+
         if (!isActive) {
+            this.getPieceMethod();
+
             // check if there is a piece, make sure only one can be active
-            if (event.target.style.cssText !== '') {
+            if (event.target.style.cssText !== '' && Model.activePiece.color.toLowerCase() === Model.gameStatus.toPlay.toLowerCase()) {
                 $(event.target).css('background-color', 'green');
                 Model.gameStatus.pieceIsActive = true;
-                Model.move.startSquare = event.target.id;
-                this.getPieceMethod();
+                Model.move.startSquare = getCoordinates();
             }
         } else {
             if (event.target.style.cssText === '') {
-                Model.move.endSquare = event.target.id;
+                Model.move.endSquare = getCoordinates();
 
                 // check if move is legal, then:
-                Model.gameStatus.pieceIsActive = false;
-                Model.chessboard.find(o => o.square === Model.activePiece.square).square = event.target.id;
-                this.renderPiecesMethod();                
+                if (this.isLegal()) {
+                    Model.gameStatus.pieceIsActive = false;
+                    Model.chessboard.find(o => o.square === Model.activePiece.square).square = event.target.id;
+                    this.renderPiecesMethod();
+                    toggleTurn();
+
+                    console.log(Model.move);
+                }
             }
         }
     },
