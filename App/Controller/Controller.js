@@ -44,21 +44,16 @@ var Controller = {
 
 
     clearBoard() {
-        var images = document.getElementsByTagName('img');
-        var l = images.length;
-        for (var i = 0; i < l; i++) {
-            images[0].parentNode.removeChild(images[0]);
-        }
+        $('div > div').css('background-image', '');
+        $('div > div').css('background-color', '');
     },
 
 
     renderPiecesMethod() {
-        this.clearBoard();
         const array = Model.chessboard;
+        this.clearBoard();
         array.forEach((element) => {
-            var img = document.createElement('img');
-            img.setAttribute('src', element.image);
-            document.querySelector('#' + element.square).appendChild(img);
+            $('#grid').find('#' + element.square).css('background-image', 'url(' + element.image + ')');
         });
         Model.gameStatus.gameStarted = true;
     },
@@ -69,21 +64,20 @@ var Controller = {
 
         if (!isActive) {
             // check if there is a piece, make sure only one can be active
-            if (event.target.tagName === 'IMG') {
+            if (event.target.style.cssText !== '') {
                 $(event.target).css('background-color', 'green');
                 Model.gameStatus.pieceIsActive = true;
                 Model.move.startSquare = event.target.id;
                 this.getPieceMethod();
-                // Controller.getPieceMethod();
             }
         } else {
-            if (event.target.tagName !== 'IMG') {
+            if (event.target.style.cssText === '') {
                 Model.move.endSquare = event.target.id;
 
                 // check if move is legal, then:
                 Model.gameStatus.pieceIsActive = false;
                 Model.chessboard.find(o => o.square === Model.activePiece.square).square = event.target.id;
-                this.renderPiecesMethod();
+                this.renderPiecesMethod();                
             }
         }
     },
@@ -92,8 +86,7 @@ var Controller = {
 
     // USELESS?
     getPieceMethod() {
-        var target = event.target.parentElement;
-        Model.activePiece = Model.chessboard.find(o => o.square === target.id);
+        Model.activePiece = Model.chessboard.find(o => o.square === event.target.id);
         console.log('Active piece is: ' + Model.activePiece.color + ' ' + Model.activePiece.type);
     }
 

@@ -1,6 +1,5 @@
 //-----------------------------RENDER EMPTY BOARD--------------------------------
 var View = {
-
     chessBoard: {
         column: 97,
         row: 8,

@@ -70,7 +70,6 @@ var Model = {
         toPlay: 'white',
         gameStarted: false,
         pieceIsActive: false,
-
     },
 
     move: {
